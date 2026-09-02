@@ -1,14 +1,16 @@
 package com.luisdavid.clientservice.adapter.input.web.exception;
 
 import com.luisdavid.clientservice.domain.exception.ClientNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.dao.DataIntegrityViolationException;
 
-/** Convierte errores conocidos a respuestas HTTP consistentes. */
+/**
+ * Convierte errores de dominio y de validación en respuestas RFC 9457 consistentes.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -24,12 +26,17 @@ public class GlobalExceptionHandler {
         String message = exception.getBindingResult().getFieldErrors().stream().findFirst()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .orElse("La solicitud no es válida");
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
+        ProblemDetail detail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
+        detail.setTitle("Solicitud inválida");
+        return detail;
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     ProblemDetail handleDuplicateClient(DataIntegrityViolationException exception) {
-        ProblemDetail detail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "El correo electrónico ya está registrado");
+        ProblemDetail detail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                "El correo electrónico ya está registrado"
+        );
         detail.setTitle("Cliente duplicado");
         return detail;
     }

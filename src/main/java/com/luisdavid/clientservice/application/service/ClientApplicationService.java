@@ -8,29 +8,41 @@ import com.luisdavid.clientservice.domain.exception.ClientNotFoundException;
 import com.luisdavid.clientservice.domain.model.Client;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 
-/** Coordina los casos de uso de consulta y registro de clientes. */
+/**
+ * Coordina los casos de uso de registro y consulta de clientes.
+ */
 @Service
 public class ClientApplicationService implements IClientUseCase {
 
-    private final IClientRepository repository;
+    private final IClientRepository clientRepository;
+    private final Clock clock;
 
-    public ClientApplicationService(IClientRepository repository) {
-        this.repository = repository;
+    public ClientApplicationService(IClientRepository clientRepository, Clock clock) {
+        this.clientRepository = clientRepository;
+        this.clock = clock;
     }
 
     @Override
     @Transactional
     public ClientResponse createClient(CreateClientRequest request) {
-        Client client = new Client(null, request.fullName(), request.email(), java.time.LocalDateTime.now());
-        return ClientResponse.from(repository.save(client));
+        Client client = new Client(
+                null,
+                request.fullName(),
+                request.email(),
+                LocalDateTime.now(clock)
+        );
+        return ClientResponse.from(clientRepository.save(client));
     }
 
     @Override
     @Transactional(readOnly = true)
     public ClientResponse getClientById(Long clientId) {
-        Client client = repository.findById(clientId)
+        Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new ClientNotFoundException(clientId));
         return ClientResponse.from(client);
     }
@@ -38,6 +50,8 @@ public class ClientApplicationService implements IClientUseCase {
     @Override
     @Transactional(readOnly = true)
     public List<ClientResponse> getAllClients() {
-        return repository.findAll().stream().map(ClientResponse::from).toList();
+        return clientRepository.findAll().stream()
+                .map(ClientResponse::from)
+                .toList();
     }
 }

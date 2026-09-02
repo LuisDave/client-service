@@ -1,1 +1,8 @@
-CREATE TABLE IF NOT EXISTS clients (id BIGINT NOT NULL AUTO_INCREMENT, full_name VARCHAR(150) NOT NULL, email VARCHAR(255) NOT NULL, created_at DATETIME(6) NOT NULL, PRIMARY KEY (id), CONSTRAINT uk_clients_email UNIQUE (email));
+CREATE TABLE IF NOT EXISTS clients (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    full_name VARCHAR(150) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at DATETIME(6) NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT uk_clients_email UNIQUE (email)
+);

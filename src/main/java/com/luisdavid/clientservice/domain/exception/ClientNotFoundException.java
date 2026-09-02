@@ -1,5 +1,11 @@
 package com.luisdavid.clientservice.domain.exception;
-/** Indica que no existe el cliente solicitado. */
-public class ClientNotFoundException extends RuntimeException {
-    public ClientNotFoundException(Long id) { super("Client not found with id: " + id); }
+
+/**
+ * Indica que no existe un cliente con el identificador solicitado.
+ */
+public final class ClientNotFoundException extends RuntimeException {
+
+    public ClientNotFoundException(Long clientId) {
+        super("No existe un cliente con el id: " + clientId);
+    }
 }
