@@ -1,5 +1,7 @@
 # Client Service
 
+> Incluye una colección Postman en `postman/client-service.postman_collection.json`.
+
 Servicio propietario de los clientes que actúan como pagadores. `payment-service` consulta esta API para comprobar que un `payerId` existe antes de registrar un pago.
 
 ## Especificación técnica
