@@ -30,7 +30,7 @@ public class ClientEntity {
     private LocalDateTime createdAt;
 
     protected ClientEntity() {
-        // Constructor requerido por JPA.
+        // JPA instancia la entidad de forma interna al reconstruirla desde la base de datos.
     }
 
     public ClientEntity(Long id, String fullName, String email, LocalDateTime createdAt) {

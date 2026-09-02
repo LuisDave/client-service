@@ -30,6 +30,7 @@ public class ClientApplicationService implements IClientUseCase {
     @Override
     @Transactional
     public ClientResponse createClient(CreateClientRequest request) {
+        // Se toma el tiempo desde una dependencia para mantener fechas reproducibles en pruebas.
         Client client = new Client(
                 null,
                 request.fullName(),
