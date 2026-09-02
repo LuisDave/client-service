@@ -1,0 +1,3 @@
+package com.luisdavid.clientservice.adapter.output.persistence.entity;
+import jakarta.persistence.*; import java.time.LocalDateTime;
+@Entity @Table(name="clients") public class ClientEntity { @Id @GeneratedValue(strategy=GenerationType.IDENTITY) Long id; @Column(name="full_name",nullable=false) String fullName; @Column(nullable=false,unique=true) String email; @Column(name="created_at",nullable=false) LocalDateTime createdAt; protected ClientEntity(){} public ClientEntity(Long id,String n,String e,LocalDateTime c){this.id=id;fullName=n;email=e;createdAt=c;} public Long getId(){return id;} public String getFullName(){return fullName;} public String getEmail(){return email;} public LocalDateTime getCreatedAt(){return createdAt;} }
